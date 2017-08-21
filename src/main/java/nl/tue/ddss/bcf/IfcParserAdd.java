@@ -7,12 +7,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import nl.tue.buildingsmart.express.parser.SchemaLoader;
 
-import org.bimserver.ifc.IfcModel;
-import org.bimserver.ifc.step.deserializer.IfcStepDeserializer;
-import org.bimserver.plugins.deserializers.DeserializeException;
-import org.bimserver.plugins.schema.SchemaDefinition;
 import org.xml.sax.SAXException;
 
 public class IfcParserAdd {

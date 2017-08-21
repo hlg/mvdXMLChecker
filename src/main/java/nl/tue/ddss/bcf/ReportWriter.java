@@ -35,28 +35,25 @@ import org.bimserver.emf.IfcModelInterface;
 import org.bimserver.emf.ModelMetaData;
 import org.bimserver.interfaces.objects.SActionState;
 import org.bimserver.interfaces.objects.SDeserializerPluginConfiguration;
-import org.bimserver.interfaces.objects.SIfcHeader;
 import org.bimserver.interfaces.objects.SLongActionState;
 import org.bimserver.interfaces.objects.SProject;
 import org.bimserver.interfaces.objects.SRevision;
 import org.bimserver.interfaces.objects.SSerializerPluginConfiguration;
 import org.bimserver.models.ifc2x3tc1.IfcProject;
+import org.bimserver.models.store.IfcHeader;
 import org.bimserver.plugins.deserializers.DeserializeException;
 import org.bimserver.plugins.services.BimServerClientInterface;
 import org.bimserver.shared.BimServerClientFactory;
 import org.bimserver.shared.ChannelConnectionException;
-import org.bimserver.shared.PublicInterfaceNotFoundException;
+import org.bimserver.shared.exceptions.*;
 import org.bimserver.shared.UsernamePasswordAuthenticationInfo;
-import org.bimserver.shared.exceptions.ServerException;
-import org.bimserver.shared.exceptions.ServiceException;
-import org.bimserver.shared.exceptions.UserException;
 import org.bimserver.utils.FileDataSource;
 import org.xml.sax.SAXException;
 
 public class ReportWriter {
 	private String ifcProjectGuid;
-	private String sIfcHeaderFilename;
-	private Date sIfcHeaderTimeStamp;
+	private String ifcHeaderFilename;
+	private Date ifcHeaderTimeStamp;
 	private Bcf bcf;
 	private BimServerClientInterface bimServerClient;
 	Set<Long> roids;
@@ -73,13 +70,13 @@ public class ReportWriter {
 				ifcProjectGuid = project.getGlobalId();
 			}
 			ModelMetaData mmd = ifcModel.getModelMetaData();
-			SIfcHeader sIfcHeader = mmd.getIfcHeader();
-			sIfcHeaderFilename = sIfcHeader.getFilename();
-			sIfcHeaderTimeStamp = sIfcHeader.getTimeStamp();
+			IfcHeader ifcHeader = mmd.getIfcHeader();
+			ifcHeaderFilename = ifcHeader.getFilename();
+			ifcHeaderTimeStamp = ifcHeader.getTimeStamp();
 		}
 	}
 	
-	public void exportToCollada(File ifcFile){
+	public void exportToCollada(File ifcFile) throws BimServerClientException {
 		try {
 			BimServerClientFactory factory = new JsonBimServerClientFactory(null, 
 					"http://localhost:8082//");
@@ -131,9 +128,9 @@ public class ReportWriter {
 		Header.File headerFile = new Header.File();
 		headerFile.setIfcProject(ifcProjectGuid);
 		headerFile.setIfcSpatialStructureElement(ifcSpatialStructureElement);
-		headerFile.setFilename(sIfcHeaderFilename);
+		headerFile.setFilename(ifcHeaderFilename);
 		GregorianCalendar gregorianCalender = new GregorianCalendar();
-		gregorianCalender.setTime(sIfcHeaderTimeStamp);
+		gregorianCalender.setTime(ifcHeaderTimeStamp);
 		try {
 			headerFile.setDate(DatatypeFactory.newInstance()
 					.newXMLGregorianCalendar(gregorianCalender));

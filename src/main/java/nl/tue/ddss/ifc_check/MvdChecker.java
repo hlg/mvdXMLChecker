@@ -2,8 +2,8 @@ package nl.tue.ddss.ifc_check;
 
 import org.bimserver.models.store.ObjectDefinition;
 import org.bimserver.plugins.Plugin;
-import org.bimserver.plugins.PluginException;
-import org.bimserver.plugins.PluginManager;
+import org.bimserver.plugins.PluginManagerInterface;
+import org.bimserver.shared.exceptions.PluginException;
 
 public class MvdChecker implements Plugin{
 
@@ -32,7 +32,7 @@ public class MvdChecker implements Plugin{
 	}
 
 	@Override
-	public void init(PluginManager arg0) throws PluginException {
+	public void init(PluginManagerInterface arg0) throws PluginException {
 		// TODO Auto-generated method stub
 		
 	}

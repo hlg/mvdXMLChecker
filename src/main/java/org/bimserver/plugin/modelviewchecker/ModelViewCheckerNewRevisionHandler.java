@@ -15,15 +15,14 @@ import org.bimserver.emf.IfcModelInterface;
 import org.bimserver.interfaces.objects.SExtendedData;
 import org.bimserver.interfaces.objects.SExtendedDataSchema;
 import org.bimserver.interfaces.objects.SFile;
-import org.bimserver.interfaces.objects.SIfcHeader;
 import org.bimserver.interfaces.objects.SObjectType;
 import org.bimserver.interfaces.objects.SProject;
 import org.bimserver.interfaces.objects.SSerializerPluginConfiguration;
 import org.bimserver.models.ifc2x3tc1.IfcProject;
-import org.bimserver.plugins.services.BimServerClientException;
+import org.bimserver.shared.exceptions.BimServerClientException;
 import org.bimserver.plugins.services.BimServerClientInterface;
 import org.bimserver.plugins.services.NewRevisionHandler;
-import org.bimserver.shared.PublicInterfaceNotFoundException;
+import org.bimserver.shared.exceptions.PublicInterfaceNotFoundException;
 import org.bimserver.shared.exceptions.ServerException;
 import org.bimserver.shared.exceptions.UserException;
 import org.slf4j.Logger;
@@ -49,11 +48,7 @@ public class ModelViewCheckerNewRevisionHandler implements NewRevisionHandler {
 		SSerializerPluginConfiguration sSerializer;
 		try {
 			SProject project = bimServerClientInterface.getBimsie1ServiceInterface().getProjectByPoid(poid);
-			IfcModelInterface model = bimServerClientInterface.getModel(project, roid, false);
-			SIfcHeader ifcHeader = new SIfcHeader();
-			ifcHeader.setFilename("tmp");
-			ifcHeader.setTimeStamp(new Date());
-			model.getModelMetaData().setIfcHeader(ifcHeader);
+			IfcModelInterface model = bimServerClientInterface.getModel(project, roid, false, false);
 			ByteArrayOutputStream bcfOutput = new ByteArrayOutputStream();
 			try {
 				List<MVDConstraint> constraints = mvdXMLParser.generateConceptTrees();

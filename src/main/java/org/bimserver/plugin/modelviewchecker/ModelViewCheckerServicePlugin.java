@@ -10,8 +10,8 @@ import org.bimserver.models.store.ServiceDescriptor;
 import org.bimserver.models.store.StoreFactory;
 import org.bimserver.models.store.Trigger;
 import org.bimserver.plugins.PluginConfiguration;
-import org.bimserver.plugins.PluginException;
-import org.bimserver.plugins.PluginManager;
+import org.bimserver.plugins.PluginManagerInterface;
+import org.bimserver.shared.exceptions.PluginException;
 import org.bimserver.plugins.services.ServicePlugin;
 
 public class ModelViewCheckerServicePlugin extends ServicePlugin {
@@ -20,22 +20,18 @@ public class ModelViewCheckerServicePlugin extends ServicePlugin {
 	private ClassLoader pluginClassLoader;
 	private ServiceDescriptor serviceDescriptor;
 
-	@Override
 	public String getDescription() {
 		return "Model View Checker";
 	}
 
-	@Override
 	public String getDefaultName() {
 		return "ModelViewChecker";
 	}
 
-	@Override
 	public String getVersion() {
 		return "0.1";
 	}
 
-	@Override
 	public ObjectDefinition getSettingsDefinition() {
 		ObjectDefinition objectDefinition = StoreFactory.eINSTANCE.createObjectDefinition();
 		
@@ -53,7 +49,7 @@ public class ModelViewCheckerServicePlugin extends ServicePlugin {
 	}
 	
 	@Override
-	public void init(PluginManager pluginManager) throws PluginException {
+	public void init(PluginManagerInterface pluginManager) throws PluginException {
 		super.init(pluginManager);
 		pluginClassLoader = getPluginManager().getPluginContext(this).getClassLoader();
 	}
