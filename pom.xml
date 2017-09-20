@@ -2,8 +2,8 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>Model_View_Checker</groupId>
-	<artifactId>Model_View_Checker</artifactId>
+	<groupId>org.opensourcebim</groupId>
+	<artifactId>mvdxmlchecker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -13,6 +13,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<description>mvdXML based model checker</description>
+	<organization>
+		<name>OpenSource BIM / TU Eindhoven</name>
+		<url>opensourcebim.org</url>
+	</organization>
 
 	<build>
 	<plugins>
@@ -25,6 +31,16 @@
 			</configuration>
 		</plugin>
 	</plugins>
+	<resources>
+		<resource>
+			<directory>plugin</directory>
+			<targetPath>plugin</targetPath>
+		</resource>
+		<resource>
+			<directory>${basedir}</directory>
+			<includes> <include>pom.xml</include> </includes>
+		</resource>
+	</resources>
 	</build>
 
 
@@ -42,12 +58,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.opensourcebim</groupId>
-			<artifactId>PluginBase</artifactId>
-			<version>1.5.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.opensourcebim</groupId>
-			<artifactId>bimserverclientlib</artifactId>
+			<artifactId>shared</artifactId>
 			<version>1.5.85</version>
 		</dependency>
 		<dependency>

@@ -16,6 +16,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.google.common.collect.Sets;
 import org.apache.commons.io.IOUtils;
 import org.bimserver.bcf.Bcf;
 import org.bimserver.bcf.BcfException;
@@ -30,7 +31,6 @@ import org.bimserver.bcf.visinfo.Direction;
 import org.bimserver.bcf.visinfo.PerspectiveCamera;
 import org.bimserver.bcf.visinfo.Point;
 import org.bimserver.bcf.visinfo.VisualizationInfo;
-import org.bimserver.client.json.JsonBimServerClientFactory;
 import org.bimserver.emf.IfcModelInterface;
 import org.bimserver.emf.ModelMetaData;
 import org.bimserver.interfaces.objects.SActionState;
@@ -75,7 +75,7 @@ public class ReportWriter {
 			ifcHeaderTimeStamp = ifcHeader.getTimeStamp();
 		}
 	}
-	
+/*
 	public void exportToCollada(File ifcFile) throws BimServerClientException {
 		try {
 			BimServerClientFactory factory = new JsonBimServerClientFactory(null, 
@@ -83,44 +83,40 @@ public class ReportWriter {
 			bimServerClient = factory
 					.create(new UsernamePasswordAuthenticationInfo(
 							"c.zhang@tue.nl", "chi"));
-			SProject project = bimServerClient.getBimsie1ServiceInterface()
+			SProject project = bimServerClient.getServiceInterface()
 					.addProject("test" + Math.random(), "ifc2x3tc1");
 			long poid = project.getOid();
 			SDeserializerPluginConfiguration deserializer = bimServerClient
-					.getBimsie1ServiceInterface().getDeserializerByName(
+					.getServiceInterface().getDeserializerByName(
 							"IfcStepDeserializer");
-			bimServerClient.getBimsie1ServiceInterface().checkin(
+			bimServerClient.getServiceInterface().checkin(
 					project.getOid(), "test", deserializer.getOid(),
 					ifcFile.length(), ifcFile.getName(),
-					new DataHandler(new FileDataSource(ifcFile)), true);
-			List<SRevision> revs = bimServerClient.getBimsie1ServiceInterface()
-					.getAllRevisionsOfProject(poid);
+					new DataHandler(new FileDataSource(ifcFile)), true,true); // TODO check boolean param
+			List<SRevision> revs = bimServerClient.getServiceInterface().getAllRevisionsOfProject(poid);
 			long roid = revs.get(revs.size() - 1).getOid();
 
 			SSerializerPluginConfiguration sSerializer;
 
-			sSerializer = bimServerClient.getBimsie1ServiceInterface()
+			sSerializer = bimServerClient.getServiceInterface()
 					.getSerializerByName("Collada");
-			long downloadId = bimServerClient.getBimsie1ServiceInterface()
-					.download(roid, sSerializer.getOid(), true, true);
+			long downloadId = bimServerClient.getServiceInterface()
+					.download(Sets.newHashSet(roid), "", sSerializer.getOid(), true);
 			SLongActionState downloadState = bimServerClient.getRegistry()
 					.getProgress(downloadId);
 			if (downloadState.getState() == SActionState.FINISHED) {
 				InputStream inputStream = bimServerClient
-						.getBimsie1ServiceInterface()
+						.getServiceInterface()
 						.getDownloadData(downloadId).getFile().getInputStream();
 				FileOutputStream fileOutputStream = new FileOutputStream(
 						File.createTempFile("Model_View_Checker", ""));
 				IOUtils.copy(inputStream, fileOutputStream);
 				fileOutputStream.close();
 			}
-		} catch (ServerException | UserException
-				| PublicInterfaceNotFoundException | IOException e) {
-			e.printStackTrace();
-		} catch (ServiceException | ChannelConnectionException e) {
+		} catch (PublicInterfaceNotFoundException | IOException | ServiceException | ChannelConnectionException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
     private Markup addMarkup(String ifcSpatialStructureElement, String ifcGuid, String comment,String topicGuid){
 		Markup markup = new Markup();

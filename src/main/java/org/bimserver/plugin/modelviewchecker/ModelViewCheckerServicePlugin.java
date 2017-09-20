@@ -10,12 +10,14 @@ import org.bimserver.models.store.ServiceDescriptor;
 import org.bimserver.models.store.StoreFactory;
 import org.bimserver.models.store.Trigger;
 import org.bimserver.plugins.PluginConfiguration;
+import org.bimserver.plugins.PluginContext;
 import org.bimserver.plugins.PluginManagerInterface;
 import org.bimserver.shared.exceptions.PluginException;
 import org.bimserver.plugins.services.ServicePlugin;
 
 public class ModelViewCheckerServicePlugin extends ServicePlugin {
 	private static final String MVD_XML_PARAMETER_NAME = "mvdXML";
+
 
 	private ClassLoader pluginClassLoader;
 	private ServiceDescriptor serviceDescriptor;
@@ -49,19 +51,14 @@ public class ModelViewCheckerServicePlugin extends ServicePlugin {
 	}
 	
 	@Override
-	public void init(PluginManagerInterface pluginManager) throws PluginException {
-		super.init(pluginManager);
-		pluginClassLoader = getPluginManager().getPluginContext(this).getClassLoader();
-	}
-
-	@Override
-	public String getTitle() {
-		return "Model View Checker";
+	public void init(PluginContext pluginContext) throws PluginException {
+		super.init(pluginContext);
+		pluginClassLoader = pluginContext.getClassLoader();
 	}
 
 	@Override
 	public void register(long uoid, SInternalServicePluginConfiguration internalServicePluginConfiguration, PluginConfiguration pluginConfiguration) {
-		final String targetNamespace = "http://www.buildingsmart-tech.org/specifications/bcf-releases";
+		final String targetNamespace = "BCF_ZIP_2_0";
 
 		serviceDescriptor = StoreFactory.eINSTANCE.createServiceDescriptor();
 		serviceDescriptor.setProviderName("BIMserver");
@@ -72,8 +69,8 @@ public class ModelViewCheckerServicePlugin extends ServicePlugin {
 		serviceDescriptor.setReadRevision(true);
 		serviceDescriptor.setWriteExtendedData(targetNamespace);
 		serviceDescriptor.setTrigger(Trigger.NEW_REVISION);
-		
-		final byte[] mvdXMLData = pluginConfiguration.getByteArray(MVD_XML_PARAMETER_NAME);
+
+		final byte[] mvdXMLData = pluginConfiguration.getByteArray(MVD_XML_PARAMETER_NAME); // TODO: check why this does not work
 
 		if (mvdXMLData != null) {
 			registerNewRevisionHandler(uoid, serviceDescriptor, new ModelViewCheckerNewRevisionHandler(mvdXMLData, pluginClassLoader, targetNamespace));
@@ -81,6 +78,6 @@ public class ModelViewCheckerServicePlugin extends ServicePlugin {
 	}
 	
 	public void unregister(SInternalServicePluginConfiguration internalServicePluginConfiguration) {
-		unregisterNewRevisionHandler(serviceDescriptor);
+		// unregisterNewRevisionHandler(serviceDescriptor);
 	}
 }

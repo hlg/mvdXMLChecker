@@ -47,7 +47,7 @@ public class ModelViewCheckerNewRevisionHandler implements NewRevisionHandler {
 			throws ServerException, UserException {
 		SSerializerPluginConfiguration sSerializer;
 		try {
-			SProject project = bimServerClientInterface.getBimsie1ServiceInterface().getProjectByPoid(poid);
+			SProject project = bimServerClientInterface.getServiceInterface().getProjectByPoid(poid);
 			IfcModelInterface model = bimServerClientInterface.getModel(project, roid, false, false);
 			ByteArrayOutputStream bcfOutput = new ByteArrayOutputStream();
 			try {
@@ -66,8 +66,7 @@ public class ModelViewCheckerNewRevisionHandler implements NewRevisionHandler {
 				mainIfcProject = ifcProjects.get(0);
 			}
 
-			SExtendedDataSchema extendedDataSchemaByNamespace = bimServerClientInterface.getBimsie1ServiceInterface().getExtendedDataSchemaByNamespace(
-					targetNameSpace);
+			SExtendedDataSchema extendedDataSchemaByNamespace = bimServerClientInterface.getServiceInterface().getExtendedDataSchemaByName( targetNameSpace);
 
 			SFile file = new SFile();
 
@@ -83,7 +82,7 @@ public class ModelViewCheckerNewRevisionHandler implements NewRevisionHandler {
 				long fileId = bimServerClientInterface.getServiceInterface().uploadFile(file);
 				extendedData.setFileId(fileId);
 
-				bimServerClientInterface.getBimsie1ServiceInterface().addExtendedDataToRevision(roid, extendedData);
+				bimServerClientInterface.getServiceInterface().addExtendedDataToRevision(roid, extendedData);
 			} catch (Exception e) {
 				LOGGER.error("", e);
 			}
